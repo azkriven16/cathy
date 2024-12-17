@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NISU CICS | Cathy Bayot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f0f0f;
+            --text-primary: #ffffff;
+            --accent-color: #00ff83;
+            --bg-secondary: #1a1a1a;
+            --hover-color: #ff3d68;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            perspective: 1000px;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+            transition: transform 0.5s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .section {
+            background-color: var(--bg-secondary);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg) scale(0.9);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .section.active {
+            transform: rotateX(0) scale(1);
+            opacity: 1;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent-color), var(--hover-color));
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        img{
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.05); }
+        }
+
+        .profile-image span {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--bg-primary);
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent-color), var(--hover-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-color), var(--hover-color));
+        }
+
+        .skills-list, .education-list {
+            list-style: none;
+        }
+
+        .skills-list li, .education-list li {
+            position: relative;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .skills-list li:hover, .education-list li:hover {
+            padding-left: 20px;
+            color: var(--accent-color);
+        }
+
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .interest-tag {
+            background-color: rgba(0, 255, 131, 0.1);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .interest-tag:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-primary);
+        }
+
+        .contact-info a {
+            color: var(--accent-color);
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent-color), var(--hover-color));
+            transition: width 0.3s ease;
+        }
+
+        .contact-info a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-image {
+                margin-right: 0;
+                margin-bottom: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    <div class="container">
+        <div class="section">
+            <div class="profile-header">
+                <div class="profile-image">
+                   <img src="me.jpg" style="object-fit:contain"/>
+                </div>
+                <div>
+                    <h1>Cathy P. Bayot</h1>
+                    <p>BS Information Technology Student | NISU CICS</p>
+                </div>
+            </div>
+            <p>Hi! I'm <strong>Cathy</strong>, a 21-year-old student at Northern Iloilo State University Estancia, Iloilo, pursuing a Bachelor of Science in Information Technology.</p>
+        </div>
+
+        <div class="section">
+            <h2>Education</h2>
+            <ul class="education-list">
+                <li>Dugman Elementary School</li>
+                <li>Nicomedes R. Tubar Sr. National High School</li>
+                <li>Northern Iloilo State University</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Skills</h2>
+            <ul class="skills-list">
+                <li>Web Development: HTML, CSS</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Interests</h2>
+            <div class="interests">
+                <span class="interest-tag">Drawing</span>
+                <span class="interest-tag">Art</span>
+                <span class="interest-tag">Outdoor Activities</span>
+                <span class="interest-tag">Travel</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Contact</h2>
+            <div class="contact-info">
+                <p>Email: <a href="mailto:cathybayot99@gmail.com">cathybayot99@gmail.com</a></p>
+                <p>Phone: 09702956774</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        const sections = document.querySelectorAll('.section');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorFollower.style.left = e.clientX + 'px';
+            cursorFollower.style.top = e.clientY + 'px';
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
